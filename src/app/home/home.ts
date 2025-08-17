@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { HousingLocation } from '../housing-location/housing-location';
 import { HousingLocationInfo } from '../housinglocation';
 @Component({
@@ -11,10 +11,14 @@ import { HousingLocationInfo } from '../housinglocation';
         <button class="primary" type="button">Search</button>
       </form>
     </section>
+    <div>
+      <!-- <h2>What you are typing: {{ label }}</h2> -->
+    </div>
     <section class="results">
- @for(housingLocation of housingLocationList; track $index) {
-        <app-housing-location [housingLocation]="housingLocation"></app-housing-location>
-      }    </section>
+    @for(housingLocation of housingLocationList; track $index) {
+            <app-housing-location [housingLocation]="housingLocation"></app-housing-location>
+    }    
+    </section>
   `,
   styleUrls: ['./home.css'],
 })
@@ -122,4 +126,10 @@ export class Home {
       laundry: true,
     },
   ];
+  value = input('',{transform: trimString});
+  label = computed(() => this.value());
+}
+
+function trimString(value: string | undefined): string {
+  return value?.trim() ?? '';
 }
