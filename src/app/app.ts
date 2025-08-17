@@ -1,12 +1,26 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
+import { Home } from './home/home';
+import { LucideAngularModule, LucideHousePlus } from 'lucide-angular';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+  imports: [
+    Home,
+    LucideAngularModule
+  ],
+  template: `
+    <main>
+      <header class="brand-name">
+        <lucide-icon [img]="LucideHousePlus" class="my-icon" size="80"/>
+      </header>
+      <section class="content">
+        <app-home></app-home>
+      </section>
+    </main>
+  `,
+  styleUrls: ['./app.css'],
 })
 export class App {
-  protected readonly title = signal('angular-first-step');
+  title = 'homes';
+  readonly LucideHousePlus = LucideHousePlus;
 }
