@@ -7,13 +7,20 @@
   justify-content: space-around;
 }
 
+.search-fields {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
 input[type="text"] {
   border: solid 1px green;
   padding: 10px;
   border-radius: 8px;
   margin-right: 4px;
   display: inline-block;
-  width: 30%;
+  width: 50%;
 }
 
 button {
@@ -23,6 +30,7 @@ button {
   color: yellow;
   background-color: blueviolet;
   border-radius: 8px;
+  width: 10%;
 }
 
 @media (min-width: 500px) and (max-width: 768px) {
@@ -31,11 +39,11 @@ button {
   }
   input[type="text"] {
       width: 70%;
-  }   
+  }
 }
 
 @media (max-width: 499px) {
   .results {
       grid-template-columns: 1fr;
-  }    
+  }
 }

@@ -1,10 +1,11 @@
 import { Component, input } from '@angular/core';
-import { HousingLocationInfo } from '../housinglocation';
+import { HousingLocationInfo } from '../interfaces/housinglocation';
 import { LucideLocateFixed, LucideAngularModule } from 'lucide-angular';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-housing-location',
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, RouterLink],
   template: `
     <section class="listing">
       <img
@@ -15,11 +16,15 @@ import { LucideLocateFixed, LucideAngularModule } from 'lucide-angular';
       />
       <h2 class="listing-heading">{{ housingLocation().name }}</h2>
       <p class="listing-location">
-                <lucide-icon [img]="LucideLocateFixed" class="my-icon" size="32"/>
-                {{ housingLocation().city }}, {{ housingLocation().state }}</p>
+        <lucide-icon [img]="LucideLocateFixed" class="my-icon" size="32" />
+        {{ housingLocation().city }}, {{ housingLocation().state }}
+      </p>
+      <a [routerLink]="['/details', housingLocation().id]">Learn More</a>
     </section>
-  `, styleUrl: './housing-location.css'
+  `,
+  styleUrl: './housing-location.css',
 })
+
 export class HousingLocation {
   readonly LucideLocateFixed = LucideLocateFixed;
   housingLocation = input.required<HousingLocationInfo>();

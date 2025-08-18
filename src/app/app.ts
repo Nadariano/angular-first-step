@@ -1,26 +1,24 @@
 import { Component } from '@angular/core';
-import { Home } from './home/home';
-import { LucideAngularModule, LucideHousePlus } from 'lucide-angular';
+import { LucideAngularModule } from 'lucide-angular';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [
-    Home,
-    LucideAngularModule
-  ],
+  imports: [RouterModule, LucideAngularModule],
   template: `
     <main>
-      <header class="brand-name">
-        <lucide-icon [img]="LucideHousePlus" class="my-icon" size="80"/>
-      </header>
+      <a [routerLink]="['/']">
+        <header class="brand-name">
+          <h1>Angular-first-step</h1>
+        </header>
+      </a>
       <section class="content">
-        <app-home></app-home>
+        <router-outlet></router-outlet>
       </section>
     </main>
   `,
   styleUrls: ['./app.css'],
 })
 export class App {
-  title = 'homes';
-  readonly LucideHousePlus = LucideHousePlus;
+  title = 'Main';
 }
