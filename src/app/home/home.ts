@@ -1,10 +1,13 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CourseInfo } from '../../interfaces/course';
 import { Course } from '../course/course';
 import { CourseService } from '../../services/course.service';
+import { NgForm } from '@angular/forms';
+import { CourseCreator } from '../course-creator/course-creator';
+import { NgFor } from '@angular/common';
 @Component({
   selector: 'app-home',
-  imports: [Course],
+  imports: [Course, CourseCreator],
   template: `
     <section>
       <form class="search-fields">
@@ -12,9 +15,12 @@ import { CourseService } from '../../services/course.service';
         <button class="primary" type="button" (click)="filterResults(filter.value)">Search</button>
       </form>
     </section>
-    <!-- <div>
-      <h2>What you are typing: {{ label() }}</h2>
-    </div> -->
+    <button (click)="toggleForm()">
+      {{ showForm() ? 'Close Form' : 'Add Course' }}
+    </button>
+    @if (showForm()) {
+    <app-course-creator (courseAdded)="addCourse($event)"></app-course-creator>
+    }
     <section class="results">
       @for(course of filteredCourseList; track $index) {
       <app-course [course]="course"></app-course>
@@ -28,16 +34,13 @@ export class Home {
   courseList: CourseInfo[] = [];
   filteredCourseList: CourseInfo[] = [];
   courseService: CourseService = inject(CourseService);
-  // value = input('', { transform: trimString });
-  // label = computed(() => this.value().toString);
+  showForm = signal<boolean>(false);
 
   constructor() {
-     this.courseService
-      .getAllCourses()
-      .then((courseList: CourseInfo[]) => {
-        this.courseList = courseList;
-        this.filteredCourseList = courseList;
-      });
+    this.courseService.getAllCourses().then((courseList: CourseInfo[]) => {
+      this.courseList = courseList;
+      this.filteredCourseList = courseList;
+    });
     this.filteredCourseList = this.courseList;
   }
 
@@ -50,8 +53,13 @@ export class Home {
       course?.name.toLowerCase().includes(text.toLowerCase())
     );
   }
-}
 
-// function trimString(value: string | undefined): string {
-//   return value?.trim() ?? '';
-// }
+  toggleForm() {
+    this.showForm.update((v: boolean) => !v);
+  }
+
+  addCourse(newCourse: CourseInfo) {
+    // this.courseList.update(c => [...c, newCourse]);
+    this.showForm.set(false);
+  }
+}
