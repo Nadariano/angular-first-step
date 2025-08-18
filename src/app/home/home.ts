@@ -1,10 +1,10 @@
-import { Component, computed, input, inject } from '@angular/core';
-import { HousingLocation } from '../housing-location/housing-location';
-import { HousingLocationInfo } from '../interfaces/housinglocation';
-import { HousingService } from '../../services/housing.service';
+import { Component, inject } from '@angular/core';
+import { CourseInfo } from '../../interfaces/course';
+import { Course } from '../course/course';
+import { CourseService } from '../../services/course.service';
 @Component({
   selector: 'app-home',
-  imports: [HousingLocation],
+  imports: [Course],
   template: `
     <section>
       <form class="search-fields">
@@ -16,8 +16,8 @@ import { HousingService } from '../../services/housing.service';
       <h2>What you are typing: {{ label() }}</h2>
     </div> -->
     <section class="results">
-      @for(housingLocation of filteredLocationList; track $index) {
-      <app-housing-location [housingLocation]="housingLocation"></app-housing-location>
+      @for(course of filteredCourseList; track $index) {
+      <app-course [course]="course"></app-course>
       }
     </section>
   `,
@@ -25,24 +25,29 @@ import { HousingService } from '../../services/housing.service';
 })
 export class Home {
   readonly baseUrl = 'https://angular.dev/assets/images/tutorials/common';
-  housingLocationList: HousingLocationInfo[] = [];
-  filteredLocationList: HousingLocationInfo[] = [];
-  housingService: HousingService = inject(HousingService);
+  courseList: CourseInfo[] = [];
+  filteredCourseList: CourseInfo[] = [];
+  courseService: CourseService = inject(CourseService);
   // value = input('', { transform: trimString });
   // label = computed(() => this.value().toString);
 
   constructor() {
-    this.housingLocationList = this.housingService.getAllHousingLocations();
-    this.filteredLocationList = this.housingLocationList;
+     this.courseService
+      .getAllCourses()
+      .then((courseList: CourseInfo[]) => {
+        this.courseList = courseList;
+        this.filteredCourseList = courseList;
+      });
+    this.filteredCourseList = this.courseList;
   }
 
   filterResults(text: string) {
     if (!text) {
-      this.filteredLocationList = this.housingLocationList;
+      this.filteredCourseList = this.courseList;
       return;
     }
-    this.filteredLocationList = this.housingLocationList.filter((hl) =>
-      hl?.name.toLowerCase().includes(text.toLowerCase())
+    this.filteredCourseList = this.courseList.filter((course) =>
+      course?.name.toLowerCase().includes(text.toLowerCase())
     );
   }
 }

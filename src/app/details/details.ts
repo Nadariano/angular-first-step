@@ -1,59 +1,53 @@
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { HousingService } from '../../services/housing.service';
-import { HousingLocationInfo } from '../interfaces/housinglocation';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { CourseService } from '../../services/course.service';
+import { CourseInfo } from '../../interfaces/course';
 
 @Component({
   selector: 'details',
   imports: [ReactiveFormsModule],
   template: `
-    <article>
-      <div class="card">
-        <img
-          class="listing-photo"
-          [src]="housingLocation?.photo"
-          alt="Exterior photo of {{ housingLocation?.name }}"
-          crossorigin
-        />
-        <div class="listing-contents">
-          <section class="listing-description">
-            <h2 class="listing-heading">{{ housingLocation?.name }}</h2>
-            <p class="listing-location">
-              {{ housingLocation?.city }}, {{ housingLocation?.state }}
-            </p>
-          </section>
-          <section class="listing-features">
-            <h2 class="section-heading">About this housing location</h2>
-            <ul>
-              <li>Units available: {{ housingLocation?.availableUnits }}</li>
-              <li>Does this location have wifi: {{ housingLocation?.wifi }}</li>
-              <li>Does this location have laundry: {{ housingLocation?.laundry }}</li>
-            </ul>
-          </section>
-          <section class="listing-apply">
-            <h2 class="section-heading">Apply now to live here</h2>
-            <form [formGroup]="applyForm" (submit)="submitApplication()">
-              <label for="first-name">First Name</label>
-              <input id="first-name" type="text" formControlName="firstName" />
-              <label for="last-name">Last Name</label>
-              <input id="last-name" type="text" formControlName="lastName" />
-              <label for="email">Email</label>
-              <input id="email" type="email" formControlName="email" />
-              <button type="submit" class="primary">Apply now</button>
-            </form>
-          </section>
-        </div>
+    <div class="card">
+      <img
+        class="listing-photo"
+        [src]="course?.image"
+        alt="Exterior photo of {{ course?.name }}"
+        crossorigin
+      />
+      <div class="listing-contents">
+        <section class="listing-description">
+          <h2 class="listing-heading">{{ course?.name }}</h2>
+          <p class="listing-location">{{ course?.author }}, {{ course?.duration }}</p>
+        </section>
+        <section class="listing-features">
+          <h2 class="section-heading">{{ course?.price}}</h2>
+          <ul>
+            <li>Description: {{ course?.description }}</li>
+          </ul>
+        </section>
+        <section class="listing-apply">
+          <h2 class="section-heading">Enrol now!</h2>
+          <form [formGroup]="applyForm" (submit)="submitApplication()">
+            <label for="first-name">First Name</label>
+            <input id="first-name" type="text" formControlName="firstName" />
+            <label for="last-name">Last Name</label>
+            <input id="last-name" type="text" formControlName="lastName" />
+            <label for="email">Email</label>
+            <input id="email" type="email" formControlName="email" />
+            <button type="submit" class="primary">Apply now</button>
+          </form>
+        </section>
       </div>
-    </article>
+    </div>
   `,
   styleUrls: ['./details.css'],
 })
 export class Details {
   route: ActivatedRoute = inject(ActivatedRoute);
-  housingLocationId: Number = -1;
-  housingLocation: HousingLocationInfo | undefined;
-  housingService = inject(HousingService);
+  courseId: Number = -1;
+  course: CourseInfo | undefined;
+  courseService = inject(CourseService);
 
   applyForm = new FormGroup({
     firstName: new FormControl(''),
@@ -62,12 +56,14 @@ export class Details {
   });
 
   constructor() {
-    const housingLocationId = Number(this.route.snapshot.params['id']);
-    this.housingLocation = this.housingService.getHousingLocationById(housingLocationId);
+    const courseId = parseInt(this.route.snapshot.params['id'], 10);
+    this.courseService.getCourseById(courseId).then((course) => {
+      this.course = course;
+    });
   }
 
   submitApplication() {
-    this.housingService.submitApplication(
+    this.courseService.submitApplication(
       this.applyForm.value.firstName ?? '',
       this.applyForm.value.lastName ?? '',
       this.applyForm.value.email ?? ''
