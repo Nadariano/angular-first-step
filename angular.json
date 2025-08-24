@@ -77,6 +77,20 @@
           },
           "defaultConfiguration": "development"
         },
+        "serve-ssr": {
+          "builder": "@angular-devkit/build-angular:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "test:build:development",
+              "serverTarget": "test:build:development"
+            },
+            "production": {
+              "browserTarget": "test:build:production",
+              "serverTarget": "test:build:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
         },
