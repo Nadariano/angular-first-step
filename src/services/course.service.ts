@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import axios from 'axios';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { CourseInfo } from '../interfaces/course';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -9,55 +10,78 @@ export class CourseService {
   COURSE_URL = 'https://6537443cbb226bb85dd30234.mockapi.io/courses';
   FAV_COURSE_URL = 'https://6537443cbb226bb85dd30234.mockapi.io/my_favorites';
 
-  createCourse = async (newCourse: CourseInfo) => {
-    try {
-      const response = await axios.post(this.COURSE_URL, newCourse);
-      console.log('Created:', response.data);
-      return response.data;
-    } catch (error) {
-      console.error('Error creating post:', error);
-    }
-  };
+  constructor(private http: HttpClient) {}
 
-  async getAllCourses(): Promise<CourseInfo[]> {
+  async createCourse(newCourse: CourseInfo): Promise<CourseInfo | null> {
     try {
-      const response = await axios.get(this.COURSE_URL);
-      console.log('Fetched:', response.data);
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching posts:', error);
+      const response$ = this.http.post<CourseInfo>(this.COURSE_URL, newCourse);
+      return await firstValueFrom(response$);
+    } catch (err) {
+      console.error('Create failed', err);
+      return null;
+    }
+  }
+
+  async getAllCourses(searchStr: string | null): Promise<CourseInfo[]> {
+    try {
+      let params = new HttpParams();
+      if (searchStr && searchStr.trim() !== '') {
+        params = params.set('name', searchStr);
+      }
+      const response$ = this.http.get<CourseInfo[]>(this.COURSE_URL, { params });
+      return await firstValueFrom(response$);
+    } catch (err) {
+      console.error('Fetch failed', err);
       return [];
     }
   }
 
   async getCourseById(courseId: number): Promise<CourseInfo | undefined> {
-    const response = await axios.get(`${this.COURSE_URL}/${courseId}`);
-    return response.data ?? {};
+    try {
+      const response$ = this.http.get<CourseInfo>(`${this.COURSE_URL}/${courseId}`);
+      return await firstValueFrom(response$);
+    } catch (err) {
+      console.error('Fetch by id failed', err);
+      return undefined;
+    }
   }
 
   async updateCourse(courseId: string, updatedCourse: CourseInfo): Promise<CourseInfo | null> {
     try {
-      const response = await axios.put(`${this.COURSE_URL}/${courseId}`, updatedCourse);
-      console.log('Updated:', response.data);
-      return response.data;
-    } catch (error) {
-      console.error('Error updating course:', error);
+      const response$ = this.http.put<CourseInfo>(`${this.COURSE_URL}/${courseId}`, updatedCourse);
+      return await firstValueFrom(response$);
+    } catch (err) {
+      console.error('Update failed', err);
       return null;
     }
-  };
+  }
+
+  async toggleFavorite(course: CourseInfo): Promise<CourseInfo | null> {
+    try {
+      const response$ = this.http.put<CourseInfo>(`${this.COURSE_URL}/${course.id}`, {
+        ...course,
+        isFav: !course.isFav,
+      });
+      return await firstValueFrom(response$);
+    } catch (err) {
+      console.error('Toggle fav failed', err);
+      return null;
+    }
+  }
 
   async deleteCourse(courseId: string): Promise<void> {
     try {
-      await axios.delete(`${this.COURSE_URL}/${courseId}`);
+      const response$ = this.http.delete<void>(`${this.COURSE_URL}/${courseId}`);
+      await firstValueFrom(response$);
       console.log(`Deleted course with id: ${courseId}`);
-    } catch (error) {
-      console.error('Error deleting course:', error);
+    } catch (err) {
+      console.error('Delete failed', err);
     }
-  };
+  }
 
   submitApplication(firstName: string, lastName: string, email: string) {
     console.log(
-      `Homes application received: firstName:${firstName}, lastName: ${lastName}, emai: ${email}`
+      `Course application received: firstName:${firstName}, lastName: ${lastName}, email: ${email}`
     );
   }
 }

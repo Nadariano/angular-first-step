@@ -1,0 +1,106 @@
+.course-card {
+  position: relative;
+  flex: 1 1 280px;
+  width: 100%;
+  height: 55vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border-radius: 1.25rem;
+  // background: linear-gradient(135deg, antiquewhite 0%, #fff7e6 100%);
+  // box-shadow: 0 0.5rem 1.5rem rgba(194, 144, 144, 0.12);
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow 0.4s ease;
+
+  &:hover {
+    animation: zoomPulse 1s ease-in-out forwards;
+    // box-shadow: 0 1rem 2.5rem rgba(255, 136, 0, 0.25);
+  }
+
+  .course-image {
+    width: 100%;
+    height: 12rem;
+    object-fit: cover;
+    border-radius: 1.25rem 1.25rem 0 0;
+    flex-shrink: 0;
+  }
+
+  .course-title {
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    font-weight: 700;
+    height: 40px;
+    color: lightyellow;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .course-meta {
+    display: flex;
+    justify-content: space-around;
+    font-size: clamp(0.8rem, 2vw, 0.95rem);
+    color: #666;
+    flex-shrink: 0;
+  }
+
+  .course-description {
+    flex: 1;
+    font-size: clamp(0.8rem, 2vw, 0.95rem);
+    line-height: 1.4;
+    height: 45px;
+    padding: 0.5rem 1rem;
+    color: aquamarine;
+    text-overflow: ellipsis;
+  }
+
+  .footer-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  // .fav-btn {
+  //   align-items: center;
+  //   justify-content: center;
+  //   width: 40px;
+  //   height: 40px;
+  //   border: none;
+  //   border-radius: 50%;
+  //   background: wheat;
+  //   cursor: pointer;
+  //   padding: 0;
+  //   transition: transform 0.2s ease;
+
+  //   &:hover {
+  //     transform: scale(1.1);
+  //   }
+
+  //   &:active {
+  //     transform: scale(0.95);
+  //     background: rgba(206, 159, 73, 0.5);
+  //     transition: transform 5s ease-in-out;
+  //   }
+
+  // }
+}
+
+@media (max-width: 768px) {
+  .course-card {
+    height: auto;
+  }
+}
+
+@keyframes zoomPulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}

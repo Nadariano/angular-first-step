@@ -1,0 +1,35 @@
+<p-card class="course-card" [style]="{ 'border-radius': '20px', 'overflow': 'hidden' }">
+  <ng-template pTemplate="header">
+    <img [src]="course().image" [alt]="course().name" class="course-image" />
+  </ng-template>
+
+  <ng-template pTemplate="title">
+    <h3 class="course-title">{{ course().name }}</h3>
+  </ng-template>
+
+  <ng-template pTemplate="subtitle">
+    <div class="course-meta">
+      <p-tag severity="info" value="{{ course().duration }} weeks">
+        <lucide-icon [name]="LucideTimer" />
+      </p-tag>
+      <p-tag severity="success" value="{{ course().author }}">
+        <lucide-icon [name]="LucideUser" />
+      </p-tag>
+    </div>
+  </ng-template>
+
+  <p class="course-description">
+    {{ course().description }}
+  </p>
+
+  <ng-template pTemplate="footer">
+    <div class="footer-actions">
+      <p-badge value="{{ course().price | currency:'USD' }}" severity="warn" size="large"></p-badge>
+      <p-button label="Learn More" icon="pi pi-arrow-right" severity="help"
+        [routerLink]="['/details', course().id]"></p-button>
+      <p-button icon="{{ course().isFav ? 'pi pi-heart-fill' : 'pi pi-heart' }}" (click)="toggleFav(course())"
+        class="fav-btn" styleClass="p-button-rounded p-button-outlined {{ course().isFav ? 'p-button-warn' : 'p-button-success' }}">
+      </p-button>
+    </div>
+  </ng-template>
+</p-card>

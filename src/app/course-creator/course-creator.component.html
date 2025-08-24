@@ -1,0 +1,116 @@
+<div class="modal-overlay" (click)="onCancel()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <span class="close-btn" (click)="onCancel()">&times;</span>
+    <h2>Create a New Course</h2>
+    <form class="course-form" [formGroup]="courseForm" (ngSubmit)="onSubmit()">
+      <!-- Course Name -->
+      <p-floatlabel>
+        <label for="name">Course Name:</label>
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          class="form-input"
+          maxlength="25"
+          minlength="5"
+        />
+      </p-floatlabel>
+      <div class="error" *ngIf="courseForm.get('name')?.touched && courseForm.get('name')?.invalid">
+        <small *ngIf="courseForm.get('name')?.errors?.['required']">Course name is required.</small>
+        <small *ngIf="courseForm.get('name')?.errors?.['minlength']">Course name must be at least 5 characters.</small>
+        <small *ngIf="courseForm.get('name')?.errors?.['maxlength']">Course name cannot exceed 25 characters.</small>
+      </div>
+
+      <!-- Description -->
+      <p-floatlabel spellcheck="true" lang="en">
+        <label for="description">Description:</label>
+        <textarea
+          id="description"
+          formControlName="description"
+          class="form-textarea"
+          minlength="50"
+          maxlength="150"
+        ></textarea>
+      </p-floatlabel>
+      <div class="error" *ngIf="courseForm.get('description')?.touched && courseForm.get('description')?.invalid">
+        <small *ngIf="courseForm.get('description')?.errors?.['required']">Description is required.</small>
+        <small *ngIf="courseForm.get('description')?.errors?.['minlength']">Description must be at least 50 characters.</small>
+        <small *ngIf="courseForm.get('description')?.errors?.['maxlength']">Description cannot exceed 150 characters.</small>
+      </div>
+
+      <!-- Image -->
+      <p-floatlabel>
+        <label for="image">Image URL:</label>
+        <input
+          id="image"
+          type="text"
+          formControlName="image"
+          class="form-input"
+        />
+      </p-floatlabel>
+      <div class="error" *ngIf="courseForm.get('image')?.touched && courseForm.get('image')?.invalid">
+        <small *ngIf="courseForm.get('image')?.errors?.['required']">Image URL is required.</small>
+      </div>
+
+      <!-- Author -->
+      <p-floatlabel>
+        <label for="author">Author:</label>
+        <input
+          id="author"
+          type="text"
+          formControlName="author"
+          class="form-input"
+          minlength="5"
+          maxlength="25"
+        />
+      </p-floatlabel>
+      <div class="error" *ngIf="courseForm.get('author')?.touched && courseForm.get('author')?.invalid">
+        <small *ngIf="courseForm.get('author')?.errors?.['required']">Author is required.</small>
+        <small *ngIf="courseForm.get('author')?.errors?.['minlength']">Author name must be at least 5 characters.</small>
+        <small *ngIf="courseForm.get('author')?.errors?.['maxlength']">Author name cannot exceed 25 characters.</small>
+      </div>
+
+      <!-- Duration -->
+      <p-floatlabel>
+        <label for="duration">Duration (weeks):</label>
+        <input
+          id="duration"
+          type="number"
+          formControlName="duration"
+          class="form-input"
+          min="4"
+          max="20"
+        />
+      </p-floatlabel>
+      <div class="error" *ngIf="courseForm.get('duration')?.touched && courseForm.get('duration')?.invalid">
+        <small *ngIf="courseForm.get('duration')?.errors?.['required']">Duration is required.</small>
+        <small *ngIf="courseForm.get('duration')?.errors?.['min']">Minimum duration is 4 weeks.</small>
+        <small *ngIf="courseForm.get('duration')?.errors?.['max']">Maximum duration is 20 weeks.</small>
+      </div>
+
+      <!-- Price -->
+      <div>
+        <label for="price">Price: {{ courseForm.get("price")?.value }}</label>
+        <input
+          id="price"
+          type="range"
+          formControlName="price"
+          class="form-range"
+          min="100"
+          max="500"
+          step="5"
+        />
+      </div>
+      <div class="error" *ngIf="courseForm.get('price')?.touched && courseForm.get('price')?.invalid">
+        <small *ngIf="courseForm.get('price')?.errors?.['required']">Price is required.</small>
+        <small *ngIf="courseForm.get('price')?.errors?.['min']">Min price is 100.</small>
+        <small *ngIf="courseForm.get('price')?.errors?.['max']">Max price is 500.</small>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" [disabled]="courseForm.invalid" class="submit-btn">
+        Add Course
+      </button>
+    </form>
+  </div>
+</div>

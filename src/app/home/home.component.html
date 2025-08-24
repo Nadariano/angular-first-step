@@ -1,0 +1,41 @@
+<section class="search-section">
+  <form class="search-fields">
+    <input
+      type="text"
+      placeholder="🔍 Search by course name or author"
+      #filter
+      id="search-field"
+    />
+    <p-button
+      label="Search"
+      severity="info"
+      class="primary"
+      type="button"
+      (click)="filterResults(filter.value)"
+    />
+  </form>
+</section>
+
+<section class="toolbar">
+  <p-button
+    [label]="showForm() ? 'Close Form' : '➕ Add Course'"
+    severity="success"
+    [raised]="true"
+    (click)="toggleForm()"
+  />
+</section>
+
+@if (showForm()) {
+<app-course-creator
+  (close)="toggleForm()"
+  (courseAdded)="onCourseAdded($event)"
+/>
+} @if (filteredCourseList().length > 0) {
+<section class="results">
+  @for (course of filteredCourseList(); track course.id) {
+  <app-course [course]="course" (favCourseAdded)="onCourseAddedToFav($event)" />
+  }
+</section>
+} @else {
+<p class="empty-message">🚀 No courses available. Try searching or add one!</p>
+}

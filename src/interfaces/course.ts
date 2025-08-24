@@ -1,9 +1,10 @@
 export interface CourseInfo {
-    id: number,
+    id: string,
     name: string,
     description: string,
     image: string,
     author: string,
-    duration: string,
-    price: string,
+    duration: number,
+    price: number,
+    isFav: boolean,
 }

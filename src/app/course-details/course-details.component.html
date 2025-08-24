@@ -1,0 +1,35 @@
+<div class="card">
+  <img class="listing-photo" [src]="course?.image" alt="Exterior photo of {{ course?.name }}" crossorigin />
+  <div class="listing-contents">
+    <section class="listing-main">
+      <section class="listing-description">
+        <h2 class="listing-heading">{{ course?.name | uppercase}}</h2>
+        <p class="listing-location">{{ course?.author }}, {{ course?.duration }} weeks</p>
+      </section>
+      <section class="listing-features">
+        <h2 class="section-heading">{{ course?.price | currency}}</h2>
+        <ul>
+          <li>Description: {{ course?.description }}</li>
+        </ul>
+      </section>
+    </section>
+    <section class="listing-apply">
+      <h2 class="section-heading">Wanna join us?</h2>
+      <form [formGroup]="applyForm" (submit)="submitApplication()">
+        <section>
+          <label for="first-name">First Name</label>
+          <input id="first-name" type="text" formControlName="firstName" />
+        </section>
+        <section>
+          <label for="last-name">Last Name</label>
+          <input id="last-name" type="text" formControlName="lastName" />
+        </section>
+        <section>
+          <label for="email">Email</label>
+          <input id="email" type="email" formControlName="email" />
+        </section>
+        <button type="submit" class="primary">Enrol now!</button>
+      </form>
+    </section>
+  </div>
+</div>
