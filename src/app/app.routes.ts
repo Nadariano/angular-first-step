@@ -12,5 +12,8 @@ export const routes: Routes = [
     path: 'details/:id',
     component: CourseDetailsComponent,
     title: 'Course details',
+    data: {
+      renderMode: 'server', //prevent re-render
+    },
   },
 ];
